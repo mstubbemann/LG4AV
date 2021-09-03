@@ -1,0 +1,11 @@
+torch==1.6.0
+torchvision==0.7.0
+pytorch-lightning==1.1.6
+transformers==4.2.2
+numpy==1.19.5
+scikit-learn==0.24.1
+pandas==1.2.1
+networkx==2.5
+langdetect==1.0.8
+nltk==3.5
+scipy==1.6.0

@@ -1,0 +1,5 @@
+.venv/
+data/*
+!data/german_ai_community_dataset.json
+!data/ai_community_dataset.json
+*__pycache__/
