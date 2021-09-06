@@ -1,6 +1,6 @@
 # Author Verification
 
-This repository contains code to run LG4AV (Link to paper follows soon!).
+This repository contains code to run [LG4AV](https://arxiv.org/abs/2109.01479).
 
 ## Setup
 To run the experiments in this repository, you need Python3.7.
