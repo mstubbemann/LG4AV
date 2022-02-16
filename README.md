@@ -27,14 +27,4 @@ PYTHONHASHSEED=42 python -m models.kdd_model
 **Warning** Running LG4AV on a specific dataset will store all 30 models with checkpoints which can take up to 3GB per model.
 Note, that the results depend on the GPU and the exact setup which is used. Hence, the results are expected to differ from the one reported in the paper.
 
-## Experiments on unseen authors
-You can run LG4AV on authors not seen at training time via
-
-```python
-PYTHONHASHSEED=42 python new_authors/preprocessing.py
-PYTHONHASHSEED=42 python - m new_authors.features
-PYTHONHASHSEED=42 python - m new_authors.gai_classify
-PYTHONHASHSEED=42 python - m new_authors.kdd_classify
-```
-
 Note, that the results depend on the GPU and the exact setup which is used. Hence, the results are expected to differ from the one reported in the paper.

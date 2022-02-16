@@ -132,18 +132,33 @@ class Net(pl.LightningModule):
     def validation_epoch_end(self, outs):
         scores = [out["preds"] for out in outs]
         scores = torch.cat(scores).detach().cpu().numpy()
-        preds = np.array([1 if x >= 0.5 else 0 for x in scores])
         labels = torch.cat([out["labels"] for out in outs]).detach().cpu().numpy()
-        f1 = f1_score(labels, preds)
-        accuracy = accuracy_score(labels, preds)
         # Needed for validation sanity check
         n = len({x for x in labels})
         if n == 1:
             auc = 0
         else:
             auc = roc_auc_score(labels, scores)
-        dic = {"val_f1": f1,
-               "val_accuracy": accuracy,
+
+        # Scan for best threshold for F1 and Accuracy
+
+        thresholds = torch.linspace(0, 1, 500)
+        current_results = []
+        for t in thresholds:
+            t = t.item()
+            preds = [1 if x >= t else 0
+                     for x in scores]
+            f1 = f1_score(labels, preds)
+            accuracy = accuracy_score(labels, preds)
+            current_results.append({"t": t,
+                                    "val_f1": f1,
+                                    "val_accuracy": accuracy})
+
+        # Check for best t
+        best_result = max(current_results, key=lambda x: [x["val_f1"], x["val_accuracy"]])
+        self.t = best_result["t"]
+        dic = {"val_f1": best_result["val_f1"],
+               "val_accuracy": best_result["val_accuracy"],
                "val_auc": auc}
 
         # Print current validation results and store them
@@ -159,7 +174,7 @@ class Net(pl.LightningModule):
         print("\n")
         scores = [out["preds"] for out in outs]
         scores = torch.cat(scores).detach().cpu().numpy()
-        preds = np.array([1 if x >= 0.5 else 0 for x in scores])
+        preds = np.array([1 if x >= self.t else 0 for x in scores])
         labels = torch.cat([out["labels"] for out in outs]).detach().cpu().numpy()
         f1 = f1_score(labels, preds)
         accuracy = accuracy_score(labels, preds)
@@ -492,6 +507,7 @@ def test_model(source_train="data/gai/train_per_author.csv",
         result["test_accuracy"] = net.test_result["test_accuracy"]
         result["test_auc"] = net.test_result["test_auc"]
         result["i"] = i
+        result["t"] = net.t
         results = results.append(result,
                                  ignore_index=True)
 
