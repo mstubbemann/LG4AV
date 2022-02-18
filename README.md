@@ -1,6 +1,9 @@
-# Author Verification
+# LG4AV: Combining Language Models and Graph Neural Networks for Author Verification
 
-This repository contains code to run [LG4AV](https://arxiv.org/abs/2109.01479).
+This repository contains code to run LG4AV. This is the code of the version which was accepted to the *Symposium on Intelligent Data Analysis 2022*.
+
+For the version which is availablle at [arXiv](https://arxiv.org/abs/2109.01479), checkout the branch ```arxiv```.
+
 
 ## Setup
 To run the experiments in this repository, you need Python3.7.
